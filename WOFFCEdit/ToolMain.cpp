@@ -306,10 +306,25 @@ void ToolMain::UpdateInput(MSG * msg)
 		break;
 
 	case WM_MOUSEMOVE:
+		m_toolInputCommands.mousePosX = GET_X_LPARAM(msg->lParam);
+		m_toolInputCommands.mousePosY = GET_Y_LPARAM(msg->lParam);
 		break;
 
-	case WM_LBUTTONDOWN:	//mouse button down,  you will probably need to check when its up too
-		//set some flag for the mouse button in inputcommands
+	case WM_LBUTTONDOWN:
+		// mouse left pressed	
+		m_toolInputCommands.mouseLeftDown = true;
+		break;
+	case WM_LBUTTONUP:
+		// mouse left released	
+		m_toolInputCommands.mouseLeftDown = false;
+		break;
+	case WM_RBUTTONDOWN:
+		// mouse right pressed	
+		m_toolInputCommands.mouseRightDown = true;
+		break;
+	case WM_RBUTTONUP:
+		// mouse right released
+		m_toolInputCommands.mouseRightDown = false;
 		break;
 
 	}
@@ -340,14 +355,14 @@ void ToolMain::UpdateInput(MSG * msg)
 	//rotation
 	if (m_keyArray['E'])
 	{
-		m_toolInputCommands.rotRight = true;
+		m_toolInputCommands.up = true;
 	}
-	else m_toolInputCommands.rotRight = false;
+	else m_toolInputCommands.up = false;
 	if (m_keyArray['Q'])
 	{
-		m_toolInputCommands.rotLeft = true;
+		m_toolInputCommands.down = true;
 	}
-	else m_toolInputCommands.rotLeft = false;
+	else m_toolInputCommands.down = false;
 
 	//WASD
 }

@@ -24,35 +24,6 @@ Game::Game()
 	//modes
 	m_grid = false;
 
-	//functional
-	m_movespeed = 0.30;
-	m_camRotRate = 3.0;
-
-	//camera
-	m_camPosition.x = 0.0f;
-	m_camPosition.y = 3.7f;
-	m_camPosition.z = -3.5f;
-
-	m_camOrientation.x = 0;
-	m_camOrientation.y = 0;
-	m_camOrientation.z = 0;
-
-	m_camLookAt.x = 0.0f;
-	m_camLookAt.y = 0.0f;
-	m_camLookAt.z = 0.0f;
-
-	m_camLookDirection.x = 0.0f;
-	m_camLookDirection.y = 0.0f;
-	m_camLookDirection.z = 0.0f;
-
-	m_camRight.x = 0.0f;
-	m_camRight.y = 0.0f;
-	m_camRight.z = 0.0f;
-
-	m_camOrientation.x = 0.0f;
-	m_camOrientation.y = 0.0f;
-	m_camOrientation.z = 0.0f;
-
 }
 
 Game::~Game()
@@ -72,6 +43,8 @@ void Game::Initialize(HWND window, int width, int height)
     m_gamePad = std::make_unique<GamePad>();
 
     m_keyboard = std::make_unique<Keyboard>();
+
+	m_camera = std::make_unique<Camera>(Vector3(0, 3.7, -3.75), Vector3(0, 0, 0), width, height);
 
     m_mouse = std::make_unique<Mouse>();
     m_mouse->SetWindow(window);
@@ -142,53 +115,20 @@ void Game::Update(DX::StepTimer const& timer)
 {
 	//TODO  any more complex than this, and the camera should be abstracted out to somewhere else
 	//camera motion is on a plane, so kill the 7 component of the look direction
-	Vector3 planarMotionVector = m_camLookDirection;
-	planarMotionVector.y = 0.0;
+	//Vector3 planarMotionVector = m_camLookDirection;
+	//planarMotionVector.y = 0.0;
 
-	if (m_InputCommands.rotRight)
-	{
-		m_camOrientation.y -= m_camRotRate;
-	}
-	if (m_InputCommands.rotLeft)
-	{
-		m_camOrientation.y += m_camRotRate;
-	}
 
-	//create look direction from Euler angles in m_camOrientation
-	m_camLookDirection.x = sin((m_camOrientation.y)*3.1415 / 180);
-	m_camLookDirection.z = cos((m_camOrientation.y)*3.1415 / 180);
-	m_camLookDirection.Normalize();
+	float time = timer.GetElapsedSeconds();
+	m_camera->HandleInput(m_InputCommands, time);
+	m_camera->Update(time);
 
-	//create right vector from look Direction
-	m_camLookDirection.Cross(Vector3::UnitY, m_camRight);
 
-	//process input and update stuff
-	if (m_InputCommands.forward)
-	{	
-		m_camPosition += m_camLookDirection*m_movespeed;
-	}
-	if (m_InputCommands.back)
-	{
-		m_camPosition -= m_camLookDirection*m_movespeed;
-	}
-	if (m_InputCommands.right)
-	{
-		m_camPosition += m_camRight*m_movespeed;
-	}
-	if (m_InputCommands.left)
-	{
-		m_camPosition -= m_camRight*m_movespeed;
-	}
+	
 
-	//update lookat point
-	m_camLookAt = m_camPosition + m_camLookDirection;
-
-	//apply camera vectors
-    m_view = Matrix::CreateLookAt(m_camPosition, m_camLookAt, Vector3::UnitY);
-
-    m_batchEffect->SetView(m_view);
+    m_batchEffect->SetView(m_camera->GetView());
     m_batchEffect->SetWorld(Matrix::Identity);
-	m_displayChunk.m_terrainEffect->SetView(m_view);
+	m_displayChunk.m_terrainEffect->SetView(m_camera->GetView());
 	m_displayChunk.m_terrainEffect->SetWorld(Matrix::Identity);
 
 #ifdef DXTK_AUDIO
@@ -245,7 +185,7 @@ void Game::Render()
 	//CAMERA POSITION ON HUD
 	m_sprites->Begin();
 	WCHAR   Buffer[256];
-	std::wstring var = L"Cam X: " + std::to_wstring(m_camPosition.x) + L"Cam Z: " + std::to_wstring(m_camPosition.z);
+	std::wstring var = L"Cam X: " + std::to_wstring(m_camera->GetPosition().x) + L"Cam Z: " + std::to_wstring(m_camera->GetPosition().z);
 	m_font->DrawString(m_sprites.get(), var.c_str() , XMFLOAT2(100, 10), Colors::Yellow);
 	m_sprites->End();
 
@@ -264,7 +204,7 @@ void Game::Render()
 
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
-		m_displayList[i].m_model->Draw(context, *m_states, local, m_view, m_projection, false);	//last variable in draw,  make TRUE for wireframe
+		m_displayList[i].m_model->Draw(context, *m_states, local, m_camera->GetView(), m_camera->GetProjection(), false);	//last variable in draw,  make TRUE for wireframe
 
 		m_deviceResources->PIXEndEvent();
 	}
@@ -473,7 +413,7 @@ void Game::BuildDisplayChunk(ChunkObject * SceneChunk)
 	//which, to be honest, is almost all of it. Its mostly rendering related info so...
 	m_displayChunk.PopulateChunkData(SceneChunk);		//migrate chunk data
 	m_displayChunk.LoadHeightMap(m_deviceResources);
-	m_displayChunk.m_terrainEffect->SetProjection(m_projection);
+    m_displayChunk.m_terrainEffect->SetProjection(m_camera->GetProjection());
 	m_displayChunk.InitialiseBatch();
 }
 
@@ -553,6 +493,7 @@ void Game::CreateDeviceDependentResources()
 // Allocate all memory resources that change on a window SizeChanged event.
 void Game::CreateWindowSizeDependentResources()
 {
+    DirectX::SimpleMath::Matrix m_projection;
     auto size = m_deviceResources->GetOutputSize();
     float aspectRatio = float(size.right) / float(size.bottom);
     float fovAngleY = 70.0f * XM_PI / 180.0f;
@@ -573,7 +514,8 @@ void Game::CreateWindowSizeDependentResources()
     );
 
     m_batchEffect->SetProjection(m_projection);
-	
+    m_camera->SetProjection(m_projection);
+
 }
 
 void Game::OnDeviceLost()
