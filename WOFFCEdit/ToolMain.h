@@ -25,11 +25,11 @@ public: //methods
 
 	void	Tick(MSG *msg);
 	void	UpdateInput(MSG *msg);
-
 public:	//variables
 	std::vector<SceneObject>    m_sceneGraph;	//our scenegraph storing all the objects in the current chunk
 	ChunkObject					m_chunk;		//our landscape chunk
-	int m_selectedObject;						//ID of current Selection
+	//int m_selectedObjectIndex;						//ID of current Selection
+	std::vector<DisplayObject*>    m_selectedObjects;
 
 private:	//methods
 	void	onContentAdded();
@@ -40,6 +40,7 @@ private:	//variables
 	HWND	m_toolHandle;		//Handle to the  window
 	Game	m_d3dRenderer;		//Instance of D3D rendering system for our tool
 	InputCommands m_toolInputCommands;		//input commands that we want to use and possibly pass over to the renderer
+	InputCommands m_lastFrameInputCommand;
 	CRect	WindowRECT;		//Window area rectangle. 
 	char	m_keyArray[256];
 	sqlite3 *m_databaseConnection;	//sqldatabase handle
@@ -49,5 +50,5 @@ private:	//variables
 	int m_currentChunk;			//the current chunk of thedatabase that we are operating on.  Dictates loading and saving. 
 	
 
-	
+	int testCOunt = 0;
 };

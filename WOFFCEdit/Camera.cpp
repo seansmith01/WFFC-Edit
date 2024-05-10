@@ -28,9 +28,6 @@ void Camera::HandleInput(InputCommands& _input, float _deltaTime)
 {
 
 	CameraMove(_input, _deltaTime);
-
-	
-
 	CameraLook(_input, _deltaTime);
 }
 void Camera::CameraLook(InputCommands& _input, float _deltaTime)
@@ -47,8 +44,8 @@ void Camera::CameraLook(InputCommands& _input, float _deltaTime)
 	previousMousePosition = currentMousePosition;
 
 
-	cameraOrientation.y += mouseDelta.x * -rotationSpeed * _deltaTime;
-	cameraOrientation.x -= mouseDelta.y * -rotationSpeed * _deltaTime;
+	cameraOrientation.y += mouseDelta.x * rotationSpeed * _deltaTime;
+	cameraOrientation.x -= mouseDelta.y * rotationSpeed * _deltaTime;
 
 	//cameraOrientation.x = std::min(std::max(m_orientation.x, -89.f), 89.f);
 }
@@ -57,7 +54,7 @@ void Camera::CameraMove(InputCommands& _input, float _deltaTime)
 	Vector3 moveDirection = Vector3::Zero;
 
 	Vector3 planarMoveDir = cameraLookDirection;
-	planarMoveDir.y = 0;
+	//planarMoveDir.y = 0;
 	planarMoveDir.Normalize();
 
 	if (_input.forward)
@@ -90,9 +87,13 @@ void Camera::CameraMove(InputCommands& _input, float _deltaTime)
 }
 void Camera::Update(float _deltaTime)
 {
+	auto rad2deg = 3.1415 / 180;
 	//create look direction from Euler angles in m_camOrientation
-	cameraLookDirection.x = sin((cameraOrientation.y) * 3.1415 / 180);
-	cameraLookDirection.z = cos((cameraOrientation.y) * 3.1415 / 180);
+	// sphere equation
+	cameraLookDirection.x = cos(cameraOrientation.y * rad2deg) * cos(cameraOrientation.x * rad2deg);
+	cameraLookDirection.y = sin(cameraOrientation.x * rad2deg);
+	cameraLookDirection.z = sin(cameraOrientation.y * rad2deg) * cos(cameraOrientation.x * rad2deg);
+
 	cameraLookDirection.Normalize();
 
 	//create right vector from look Direction

@@ -15,6 +15,7 @@
 #include <vector>
 
 
+
 // A basic game implementation that creates a D3D11 device and
 // provides a game loop.
 class Game : public DX::IDeviceNotify
@@ -50,7 +51,13 @@ public:
 	void BuildDisplayList(std::vector<SceneObject> * SceneGraph); //note vector passed by reference 
 	void BuildDisplayChunk(ChunkObject *SceneChunk);
 	void SaveDisplayChunk(ChunkObject *SceneChunk);	//saves geometry et al
-	void ClearDisplayList();
+
+	//std::vector<int> selectedIDs; // Vector to store selected object IDs
+	std::vector<DisplayObject*> MousePicking();
+	void MoveObject();
+	void CopyObject(std::vector<DisplayObject*> selectedObjects);
+	void PasteObject();
+	void Deselcect();
 
 #ifdef DXTK_AUDIO
 	void NewAudioDevice();
@@ -76,12 +83,12 @@ private:
 	//camera
 	std::unique_ptr<Camera> m_camera;
 
-	//DirectX::SimpleMath::Vector3		m_camPosition;
-	//DirectX::SimpleMath::Vector3		m_camOrientation;
-	//DirectX::SimpleMath::Vector3		m_camLookAt;
-	//DirectX::SimpleMath::Vector3		m_camLookDirection;
-	//DirectX::SimpleMath::Vector3		m_camRight;
-	//float m_camRotRate;
+	RECT m_screenDimensions;
+
+	std::vector<DisplayObject*> m_selectedObjects;
+	DisplayObject* m_lastSelectedObject;
+
+	std::vector<DisplayObject*> m_objectsToPaste;
 
 	//control variables
 	bool m_grid;							//grid rendering on / off

@@ -26,5 +26,7 @@ public:
 	float	m_light_constant;
 	float	m_light_linear;
 	float	m_light_quadratic;
+
+	bool m_isSelected;
 };
 

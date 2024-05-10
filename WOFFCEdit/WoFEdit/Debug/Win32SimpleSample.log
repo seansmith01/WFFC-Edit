@@ -1,6 +1,77 @@
-﻿  Camera.cpp
-D:\LocalWorkDir\2003203\WFFC-Edit\WOFFCEdit\Camera.cpp(38,58): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\LocalWorkDir\2003203\WFFC-Edit\WOFFCEdit\Camera.cpp(38,40): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
-D:\LocalWorkDir\2003203\WFFC-Edit\WOFFCEdit\Camera.cpp(94,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-D:\LocalWorkDir\2003203\WFFC-Edit\WOFFCEdit\Camera.cpp(95,29): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-  Win32SimpleSample.vcxproj -> D:\LocalWorkDir\2003203\WFFC-Edit\WOFFCEdit\Debug\WoFEdit.exe
+﻿  DisplayChunk.cpp
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(14,27): warning C4305: '=': truncation from 'double' to 'float'
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(15,49): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(74,185): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(74,81): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(94,10): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(152,10): warning C4996: 'fopen': This function or variable may be unsafe. Consider using fopen_s instead. To disable deprecation, use _CRT_SECURE_NO_WARNINGS. See online help for details.
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(189,30): warning C4101: 'index4': unreferenced local variable
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(189,14): warning C4101: 'index2': unreferenced local variable
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(189,22): warning C4101: 'index3': unreferenced local variable
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\DisplayChunk.cpp(189,6): warning C4101: 'index1': unreferenced local variable
+  Game.cpp
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(125,13): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(196,20): warning C4018: '<': signed/unsigned mismatch
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(205,57): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(204,57): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(203,97): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(190,10): warning C4101: 'Buffer': unreferenced local variable
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(575,87): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(575,60): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(576,86): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(576,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(579,23): warning C4018: '<': signed/unsigned mismatch
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(588,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(587,55): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(586,104): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(594,117): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(594,91): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(595,115): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(595,89): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(602,27): warning C4018: '<': signed/unsigned mismatch
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(632,87): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(632,60): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(633,86): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(633,59): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(636,119): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(636,93): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(637,117): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(637,91): warning C4244: 'argument': conversion from 'LONG' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Game.cpp(704,23): warning C4018: '<': signed/unsigned mismatch
+  MFCFrame.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  MFCMain.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  Main.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+  ToolMain.cpp
+  _WIN32_WINNT not defined. Defaulting to _WIN32_WINNT_MAXVER (see WinSDKVer.h)
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(91,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(92,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(93,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(94,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(95,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(96,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(97,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(98,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(99,46): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(111,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(112,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(113,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(117,48): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(118,47): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(119,42): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(123,50): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(124,50): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(134,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(135,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(136,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(137,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(138,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(139,58): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(140,59): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(141,56): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(142,54): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+\\stuhomeodd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\ToolMain.cpp(143,57): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
+  Win32SimpleSample.vcxproj -> \\StuHomeOdd\HomeDrive3$\2003203\CMP405-Tools\WFFC-Edit\WOFFCEdit\Debug\WoFEdit.exe

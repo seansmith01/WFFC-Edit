@@ -9,7 +9,7 @@ ToolMain::ToolMain()
 {
 
 	m_currentChunk = 0;		//default value
-	m_selectedObject = 0;	//initial selection ID
+	//m_selectedObjectIndex = 0;	//initial selection ID
 	m_sceneGraph.clear();	//clear the vector for the scenegraph
 	m_databaseConnection = NULL;
 
@@ -31,7 +31,7 @@ ToolMain::~ToolMain()
 int ToolMain::getCurrentSelectionID()
 {
 
-	return m_selectedObject;
+	return m_selectedObjects.size();
 }
 
 void ToolMain::onActionInitialise(HWND handle, int width, int height)
@@ -279,18 +279,31 @@ void ToolMain::onActionSaveTerrain()
 
 void ToolMain::Tick(MSG *msg)
 {
-	//do we have a selection
-	//do we have a mode
-	//are we clicking / dragging /releasing
-	//has something changed
-		//update Scenegraph
-		//add to scenegraph
-		//resend scenegraph to Direct X renderer
+	auto tempInputCommands = m_toolInputCommands;
 
+	// Left mouse pressed once
+	if (m_toolInputCommands.mouseLeftDown && !m_lastFrameInputCommand.mouseLeftDown)
+	{
+		m_selectedObjects = m_d3dRenderer.MousePicking();
+	}
+	// Left mouse held down
+	if (m_toolInputCommands.mouseLeftDown)
+	{
+		m_d3dRenderer.MoveObject();
+	}
+	if (m_toolInputCommands.copy && !m_lastFrameInputCommand.copy) {
+		m_d3dRenderer.CopyObject(m_selectedObjects);
+	}
+
+	if (m_toolInputCommands.paste && !m_lastFrameInputCommand.paste) {
+		m_d3dRenderer.PasteObject();
+
+	}
 	//Renderer Update Call
+	m_lastFrameInputCommand = tempInputCommands;
 	m_d3dRenderer.Tick(&m_toolInputCommands);
 }
-
+#define SSHIF 
 void ToolMain::UpdateInput(MSG * msg)
 {
 
@@ -326,43 +339,21 @@ void ToolMain::UpdateInput(MSG * msg)
 		// mouse right released
 		m_toolInputCommands.mouseRightDown = false;
 		break;
-
 	}
 	//here we update all the actual app functionality that we want.  This information will either be used int toolmain, or sent down to the renderer (Camera movement etc
 	//WASD movement
-	if (m_keyArray['W'])
-	{
-		m_toolInputCommands.forward = true;
-	}
-	else m_toolInputCommands.forward = false;
+	m_toolInputCommands.forward = m_keyArray['W'];
+	m_toolInputCommands.back = m_keyArray['S'];
+	m_toolInputCommands.left = m_keyArray['A'];
+	m_toolInputCommands.right = m_keyArray['D'];
+
+	m_toolInputCommands.up = m_keyArray['E'];
+	m_toolInputCommands.down = m_keyArray['Q'];
+
+	m_toolInputCommands.multiSelectDown = m_keyArray[16];
+
+	m_toolInputCommands.copy = m_keyArray['C'];
+	m_toolInputCommands.paste = m_keyArray['V'];
 	
-	if (m_keyArray['S'])
-	{
-		m_toolInputCommands.back = true;
-	}
-	else m_toolInputCommands.back = false;
-	if (m_keyArray['A'])
-	{
-		m_toolInputCommands.left = true;
-	}
-	else m_toolInputCommands.left = false;
-
-	if (m_keyArray['D'])
-	{
-		m_toolInputCommands.right = true;
-	}
-	else m_toolInputCommands.right = false;
-	//rotation
-	if (m_keyArray['E'])
-	{
-		m_toolInputCommands.up = true;
-	}
-	else m_toolInputCommands.up = false;
-	if (m_keyArray['Q'])
-	{
-		m_toolInputCommands.down = true;
-	}
-	else m_toolInputCommands.down = false;
-
-	//WASD
 }
+

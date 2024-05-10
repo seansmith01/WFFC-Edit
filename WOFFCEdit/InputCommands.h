@@ -14,4 +14,8 @@ struct InputCommands
 	
 	bool mouseLeftDown;
 	bool mouseRightDown;
+	bool multiSelectDown;
+
+	bool copy;
+	bool paste;
 };

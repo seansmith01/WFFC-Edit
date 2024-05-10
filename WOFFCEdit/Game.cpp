@@ -44,7 +44,7 @@ void Game::Initialize(HWND window, int width, int height)
 
     m_keyboard = std::make_unique<Keyboard>();
 
-	m_camera = std::make_unique<Camera>(Vector3(0, 3.7, -3.75), Vector3(0, 0, 0), width, height);
+	m_camera = std::make_unique<Camera>(Vector3(0, 10, 0), Vector3(0, 0, 0), width, height);
 
     m_mouse = std::make_unique<Mouse>();
     m_mouse->SetWindow(window);
@@ -56,6 +56,9 @@ void Game::Initialize(HWND window, int width, int height)
 
     m_deviceResources->CreateWindowSizeDependentResources();
     CreateWindowSizeDependentResources();
+
+    GetClientRect(window, &m_screenDimensions);
+
 
 #ifdef DXTK_AUDIO
     // Create DirectXTK for Audio objects
@@ -190,8 +193,7 @@ void Game::Render()
 	m_sprites->End();
 
 	//RENDER OBJECTS FROM SCENEGRAPH
-	int numRenderObjects = m_displayList.size();
-	for (int i = 0; i < numRenderObjects; i++)
+	for (int i = 0; i < m_displayList.size(); i++)
 	{
 		m_deviceResources->PIXBeginEvent(L"Draw model");
 		const XMVECTORF32 scale = { m_displayList[i].m_scale.x, m_displayList[i].m_scale.y, m_displayList[i].m_scale.z };
@@ -204,7 +206,10 @@ void Game::Render()
 
 		XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
 
-		m_displayList[i].m_model->Draw(context, *m_states, local, m_camera->GetView(), m_camera->GetProjection(), false);	//last variable in draw,  make TRUE for wireframe
+        bool wireFrame = m_displayList[i].m_isSelected ? true : false;
+        m_displayList[i].m_model->Draw(context, *m_states, local, m_camera->GetView(), m_camera->GetProjection(), wireFrame);	//last variable in draw,  make TRUE for wireframe
+
+
 
 		m_deviceResources->PIXEndEvent();
 	}
@@ -352,9 +357,12 @@ void Game::BuildDisplayList(std::vector<SceneObject> * SceneGraph)
 		HRESULT rs;
 		rs = CreateDDSTextureFromFile(device, texturewstr.c_str(), nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
 
+        //newDisplayObject.m_texture_diffuse->Release()
+
 		//if texture fails.  load error default
 		if (rs)
 		{
+
 			CreateDDSTextureFromFile(device, L"database/data/Error.dds", nullptr, &newDisplayObject.m_texture_diffuse);	//load tex into Shader resource
 		}
 
@@ -423,6 +431,7 @@ void Game::SaveDisplayChunk(ChunkObject * SceneChunk)
 }
 
 #ifdef DXTK_AUDIO
+
 void Game::NewAudioDevice()
 {
     if (m_audEngine && !m_audEngine->IsAudioDevicePresent())
@@ -552,4 +561,160 @@ std::wstring StringToWCHART(std::string s)
 	std::wstring r(buf);
 	delete[] buf;
 	return r;
+}
+std::vector<DisplayObject*> Game::MousePicking()
+{
+
+    bool selectedAnObject = false;
+
+    float pickedDistance = 0;
+
+
+    //setup near and far planes of frustum with mouse X and mouse y passed down from Toolmain. 
+    //they may look the same but note, the difference in Z
+    const XMVECTOR nearSource = XMVectorSet(m_InputCommands.mousePosX, m_InputCommands.mousePosY, 0.0f, 1.0f);
+    const XMVECTOR farSource = XMVectorSet(m_InputCommands.mousePosX, m_InputCommands.mousePosY, 1.0f, 1.0f);
+
+    //Loop through entire display list of objects and pick with each in turn. 
+    for (int i = 0; i < m_displayList.size(); i++)
+    {
+        //Get the scale factor and translation of the object
+        const XMVECTORF32 scale = { m_displayList[i].m_scale.x,		m_displayList[i].m_scale.y,		m_displayList[i].m_scale.z };
+        const XMVECTORF32 translate = { m_displayList[i].m_position.x,	m_displayList[i].m_position.y,	m_displayList[i].m_position.z };
+
+        //convert euler angles into a quaternion for the rotation of the object
+        XMVECTOR rotate = Quaternion::CreateFromYawPitchRoll(m_displayList[i].m_orientation.y * 3.1415 / 180,
+            m_displayList[i].m_orientation.x * 3.1415 / 180,
+            m_displayList[i].m_orientation.z * 3.1415 / 180);
+
+        //create set the matrix of the selected object in the world based on the translation, scale and rotation.
+        XMMATRIX local = m_world * XMMatrixTransformation(g_XMZero, Quaternion::Identity, scale, g_XMZero, rotate, translate);
+
+        //Unproject the points on the near and far plane, with respect to the matrix we just created.
+        XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_camera->GetProjection(), m_camera->GetView(), local);
+        XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_camera->GetProjection(), m_camera->GetView(), local);
+
+        //turn the transformed points into our picking vector. 
+        XMVECTOR pickingVector = farPoint - nearPoint;
+        pickingVector = XMVector3Normalize(pickingVector);
+
+        //loop through mesh list for object
+        for (int j = 0; j < m_displayList[i].m_model.get()->meshes.size(); j++)
+        {
+            //checking for ray intersection
+            if (m_displayList[i].m_model.get()->meshes[j]->boundingBox.Intersects(nearPoint, pickingVector, pickedDistance))
+            {
+                selectedAnObject = true;
+                if (!m_InputCommands.multiSelectDown) {
+                    Deselcect();
+                }
+                //Make sure clicked on object isn't already in list of selected objects
+                if (!m_displayList[i].m_isSelected) {
+                    m_displayList[i].m_isSelected = true;
+                    m_selectedObjects.push_back(&m_displayList[i]);
+                    m_lastSelectedObject = &m_displayList[i];
+                }
+                
+
+            }
+        }
+    }
+    if (selectedAnObject == false) {
+        Deselcect();
+    }
+    return m_selectedObjects;
+}
+void Game::MoveObject()
+{
+    if (m_selectedObjects.size() == 0)
+        return;
+
+    const XMVECTOR nearSource = XMVectorSet(m_InputCommands.mousePosX, m_InputCommands.mousePosY, 0.0f, 1.0f);
+    const XMVECTOR farSource = XMVectorSet(m_InputCommands.mousePosX, m_InputCommands.mousePosY, 1.0f, 1.0f);
+
+    //Unproject the points on the near and far plane
+    const XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_camera->GetProjection(), m_camera->GetView(), m_world);
+    const XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_camera->GetProjection(), m_camera->GetView(), m_world);
+
+    Vector3 dir = farPoint - nearPoint;
+    dir.Normalize();
+    Ray ray = Ray(nearPoint, dir);
+
+    //inverse lerp
+    Vector3 camPos = m_camera->GetPosition();
+
+    //dist to far from camera
+    float distToObj = Vector3::Distance(camPos, m_lastSelectedObject->m_position);
+
+    Vector3 hitPos = (ray.direction * distToObj);
+
+    if (m_selectedObjects.size() == 1) {
+        m_selectedObjects[0]->m_position = camPos + hitPos;
+        return;
+    }
+
+    for (size_t i = 0; i < m_selectedObjects.size(); i++)
+    {
+        Vector3 hitPosDiff = m_selectedObjects[i]->m_position - m_lastSelectedObject->m_position;
+        m_selectedObjects[i]->m_position = (camPos + hitPos) + hitPosDiff;
+    }
+
+}
+void Game::CopyObject(std::vector<DisplayObject*> selectedObjects)
+{
+    // If there are no selected objects, return
+    if (selectedObjects.size() == 0)
+        return;
+
+    // Clear the vector where we'll store copied objects
+    m_objectsToPaste.clear();
+
+    // Iterate through the selected objects and copy pointers into m_objectsToPaste
+    for (size_t i = 0; i < selectedObjects.size(); i++)
+    {
+        m_objectsToPaste.push_back(selectedObjects[i]);
+    }
+}
+
+void Game::PasteObject()
+{
+    // If there are no objects to paste, return
+    if (m_objectsToPaste.size() == 0)
+        return;
+
+    // Vector to store copied objects
+    std::vector<DisplayObject> displayObject;
+
+    // Iterate through objects to paste and copy them
+    for (size_t i = 0; i < m_objectsToPaste.size(); i++)
+    {
+        displayObject.push_back(*m_objectsToPaste[i]);
+    }
+
+    // Iterate through copied objects, modify position, and add them to the display list
+    for (size_t i = 0; i < displayObject.size(); i++)
+    {
+        DisplayObject newDisplayObject = displayObject.at(i);
+
+        Vector3 newPosition = newDisplayObject.m_position + Vector3(0, 3, 0);
+        newDisplayObject.m_position = newPosition;
+
+        // Add the modified object to the display list
+        m_displayList.push_back(newDisplayObject);
+    }
+
+    // Clear the list of objects to paste after pasting them
+    m_objectsToPaste.clear();
+}
+
+void Game::Deselcect()
+{
+    // Clear the list of selected objects
+    m_selectedObjects.clear();
+
+    // Deselect all objects in the display list
+    for (int k = 0; k < m_displayList.size(); k++)
+    {
+        m_displayList[k].m_isSelected = false;
+    }
 }
