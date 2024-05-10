@@ -54,7 +54,7 @@ public:
 
 	//std::vector<int> selectedIDs; // Vector to store selected object IDs
 	std::vector<DisplayObject*> MousePicking();
-	void MoveObject();
+	void MoveSelectedObjects();
 	void CopyObject(std::vector<DisplayObject*> selectedObjects);
 	void PasteObject();
 	void Deselcect();

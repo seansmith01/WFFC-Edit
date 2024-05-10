@@ -289,7 +289,7 @@ void ToolMain::Tick(MSG *msg)
 	// Left mouse held down
 	if (m_toolInputCommands.mouseLeftDown)
 	{
-		m_d3dRenderer.MoveObject();
+		m_d3dRenderer.MoveSelectedObjects();
 	}
 	if (m_toolInputCommands.copy && !m_lastFrameInputCommand.copy) {
 		m_d3dRenderer.CopyObject(m_selectedObjects);

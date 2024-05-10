@@ -624,41 +624,46 @@ std::vector<DisplayObject*> Game::MousePicking()
     }
     return m_selectedObjects;
 }
-void Game::MoveObject()
+void Game::MoveSelectedObjects()
 {
+    // If there are no selected objects, return without doing anything
     if (m_selectedObjects.size() == 0)
         return;
 
+    // Define vectors representing the source points on the near and far plane
     const XMVECTOR nearSource = XMVectorSet(m_InputCommands.mousePosX, m_InputCommands.mousePosY, 0.0f, 1.0f);
     const XMVECTOR farSource = XMVectorSet(m_InputCommands.mousePosX, m_InputCommands.mousePosY, 1.0f, 1.0f);
 
-    //Unproject the points on the near and far plane
+    // Unproject the points on the near and far plane to get the ray in world space
     const XMVECTOR nearPoint = XMVector3Unproject(nearSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_camera->GetProjection(), m_camera->GetView(), m_world);
     const XMVECTOR farPoint = XMVector3Unproject(farSource, 0.0f, 0.0f, m_screenDimensions.right, m_screenDimensions.bottom, m_deviceResources->GetScreenViewport().MinDepth, m_deviceResources->GetScreenViewport().MaxDepth, m_camera->GetProjection(), m_camera->GetView(), m_world);
 
-    Vector3 dir = farPoint - nearPoint;
-    dir.Normalize();
-    Ray ray = Ray(nearPoint, dir);
+    // Calculate the direction of the ray
+    Vector3 direction = farPoint - nearPoint;
+    direction.Normalize();
+    Ray ray = Ray(nearPoint, direction);
 
-    //inverse lerp
+    // Calculate the camera position
     Vector3 camPos = m_camera->GetPosition();
 
-    //dist to far from camera
+    // Calculate the distance from the camera to the last selected object
     float distToObj = Vector3::Distance(camPos, m_lastSelectedObject->m_position);
 
+    // Calculate the position where the ray intersects with the object
     Vector3 hitPos = (ray.direction * distToObj);
 
+    // If only one object is selected, move it directly to the hit position
     if (m_selectedObjects.size() == 1) {
         m_selectedObjects[0]->m_position = camPos + hitPos;
         return;
     }
 
+    // If multiple objects are selected, move them relative to the hit position and their original positions
     for (size_t i = 0; i < m_selectedObjects.size(); i++)
     {
         Vector3 hitPosDiff = m_selectedObjects[i]->m_position - m_lastSelectedObject->m_position;
         m_selectedObjects[i]->m_position = (camPos + hitPos) + hitPosDiff;
     }
-
 }
 void Game::CopyObject(std::vector<DisplayObject*> selectedObjects)
 {
